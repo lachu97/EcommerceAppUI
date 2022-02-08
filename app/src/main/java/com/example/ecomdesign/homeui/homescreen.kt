@@ -1,19 +1,22 @@
 package com.example.ecomdesign.homeui
 
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -22,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ecomdesign.R
 
-val iconsize = 26
-val paddingval = 10.dp
 
 @Composable
 fun toppart() {
@@ -118,11 +119,12 @@ fun Chippart(name: String, id: Int) {
         backgroundColor = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier
-            .padding(10.dp)
+            .padding(8.dp)
     ) {
         Row(
             Modifier
-                .padding(10.dp), verticalAlignment = Alignment.CenterVertically,
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
 
 
@@ -159,16 +161,117 @@ fun Chippart(name: String, id: Int) {
 
 @Composable
 fun Chipgrp() {
-   val mycards = listOf<cards>(
-       cards(1,"Sneakers"),
-       cards(2,"Watches"),
-       cards(3,"Bags"),
-   )
-    LazyRow(modifier = Modifier
-        .padding(2.dp)
-        .fillMaxWidth()){
-        itemsIndexed(mycards){ _,it ->
+    val mycards = listOf<cards>(
+        cards(1, "Sneakers"),
+        cards(2, "Watches"),
+        cards(3, "Bags"),
+    )
+    LazyRow(
+        modifier = Modifier
+            .padding(2.dp)
+            .fillMaxWidth()
+    ) {
+        itemsIndexed(mycards) { _, it ->
             Chippart(name = it.name, id = it.id)
         }
     }
+}
+
+//display cards
+@Composable
+fun productcards(onclick: () -> Unit) {
+    val newiconsize = 84
+    Surface(
+        modifier = Modifier
+            .width(194.dp)
+            .height(240.dp)
+            .padding(paddingval),
+        elevation = 10.dp,
+        shape = RoundedCornerShape(cornerradius.dp)
+    ) {
+        Card(
+            Modifier
+                .fillMaxSize()
+                .padding(1.dp)
+                .clickable {
+                    onclick
+                },
+            backgroundColor = colorResource(id = R.color.mywhite),
+            shape = RoundedCornerShape(cornerradius.dp)
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(1.dp),
+                verticalArrangement = Arrangement.spacedBy(1.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                cardtop()
+                Spacer(modifier = Modifier.padding(5.dp))
+                cardmiddle()
+
+            }
+        }
+    }
+}
+
+@Composable
+fun cardtop(
+    state: Boolean = true
+) {
+    var mystate = remember { mutableStateOf(false) }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (state) {
+            Icon(
+                painter = painterResource(id = R.drawable.discount), contentDescription = null,
+                modifier = Modifier.size(iconsize.dp)
+            )
+        }
+
+        Image(painter = painterResource(
+            id = if (mystate.value) {
+                R.drawable.heart
+            } else {
+                R.drawable.love
+            }
+        ),
+            contentDescription = null,
+            modifier = Modifier
+                .size(iconsize.dp)
+                .clip(CircleShape)
+                .clickable {
+                    mystate.value = !mystate.value
+                })
+
+    }
+}
+
+@Composable
+fun cardmiddle() {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+            drawCircle(
+                color = Color.Cyan,
+                center = Offset(x = canvasWidth / 2, y = canvasHeight / 2),
+                radius = size.minDimension / 4
+            )
+        }
+        Image(
+            painter = painterResource(id = R.drawable.shoe12)
+            , contentDescription = null,
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(74.dp)
+        )
+    }
+
+
 }

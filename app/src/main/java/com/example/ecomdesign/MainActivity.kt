@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ecomdesign.homeui.Chipgrp
+import com.example.ecomdesign.homeui.productcards
 import com.example.ecomdesign.homeui.titlepart
 import com.example.ecomdesign.homeui.toppart
 import com.example.ecomdesign.ui.theme.EcomdesignTheme
@@ -38,6 +39,10 @@ class MainActivity : ComponentActivity() {
                         titlepart()
                         Spacer(modifier = Modifier.padding(10.dp))
                         Chipgrp()
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        productcards({
+                             Unit
+                        })
                     }
 
                 }
