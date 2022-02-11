@@ -20,6 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".homeui.Detailscreen"
+            android:exported="true"
+            android:label="Someactivity"
+            android:theme="@style/Theme.Ecomdesign">
+
+        </activity>
     </application>
 
 </manifest>

@@ -183,7 +183,6 @@ fun productcards(onclick: clicker, name: String, price:String) {
     val newiconsize = 84
     Surface(
         modifier = Modifier
-            .width(200.dp)
             .padding(1.dp),
         elevation = 12.dp,
         shape = RoundedCornerShape(cornerradius.dp)

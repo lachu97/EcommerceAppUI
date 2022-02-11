@@ -1,32 +1,35 @@
 package com.example.ecomdesign
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.ShoppingCart
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.IconCompat
 import com.example.ecomdesign.homeui.*
 import com.example.ecomdesign.ui.theme.EcomdesignTheme
-import kotlin.math.absoluteValue
 
 class MainActivity : ComponentActivity(), clicker {
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,7 +41,7 @@ class MainActivity : ComponentActivity(), clicker {
                     floatingActionButton = {
                         FloatingActionButton(
                             onClick = { /*TODO*/ },
-                            modifier = Modifier.padding(4.dp),
+                            elevation = FloatingActionButtonDefaults.elevation(12.dp)
                         ) {
                             Icon(
                                 Icons.Rounded.ShoppingCart,
@@ -48,56 +51,118 @@ class MainActivity : ComponentActivity(), clicker {
                     },
                     isFloatingActionButtonDocked = true,
                     floatingActionButtonPosition = FabPosition.Center,
-                    backgroundColor = Color.White
-                    ,bottomBar = {
+                    backgroundColor = Color.White,
+                    bottomBar = {
                         BottomAppBar(
                             modifier = Modifier.padding(1.dp),
-                            cutoutShape = MaterialTheme.shapes.small.copy(
-                                CornerSize(percent = 50)
-                            ),
-                            contentPadding = PaddingValues(end = 4.dp)
+                            cutoutShape = CircleShape,
+                            contentPadding = PaddingValues(end = 4.dp),
+                            backgroundColor = colorResource(id = R.color.mywhite)
                         ) {
                             BottomNavigationItem(
                                 selected = (index.value == 0),
                                 onClick = { index.value = 0 },
                                 icon = {
-                                    Icon(Icons.Default.AccountBox, contentDescription = null)
+                                    Icon(
+                                        Icons.Default.AccountBox,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
                                 })
                             BottomNavigationItem(
                                 selected = (index.value == 1),
                                 onClick = { index.value = 1 },
                                 icon = {
-                                    Icon(Icons.Default.Call, contentDescription = null)
+                                    Icon(
+                                        Icons.Default.Call,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
                                 })
                             BottomNavigationItem(
                                 selected = (index.value == 3),
-                                onClick = { index.value = 3},
+                                onClick = { index.value = 3 },
                                 icon = {
-                                    Icon(Icons.Default.Star, contentDescription = null)
+                                    Icon(
+                                        Icons.Default.Star,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
                                 })
                             BottomNavigationItem(
                                 selected = (index.value == 4),
-                                onClick = { index.value = 4},
+                                onClick = { index.value = 4 },
                                 icon = {
-                                    Icon(Icons.Default.Search, contentDescription = null)
+                                    Icon(
+                                        Icons.Default.Search,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
                                 })
 
                         }
                     },
-                ) {
+                ) { innerpadding ->
                     Column(
                         Modifier
                             .fillMaxSize()
-                            .padding(10.dp),
+                            .padding(innerpadding),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         toppart()
-                        Spacer(modifier = Modifier.padding(10.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         titlepart()
-                        Spacer(modifier = Modifier.padding(10.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         Chipgrp()
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        productcards(this@MainActivity, "Nike 200", "$ 250.00")
+                        Spacer(modifier = Modifier.padding(1.dp))
+                        val listofcards = listOf(
+                            items(
+                                name = "Adidas SX",
+                                price = "$ 350.00"
+                            ),
+                            items(
+                                name = "Nike Sz r",
+                                price = "$ 150.00"
+                            ),
+                            items(
+                                name = "Reebok Super ",
+                                price = "$ 59.99"
+                            ),
+                            items(
+                                name = "skechers Z",
+                                price = "$ 559.99"
+                            ),
+                            items(
+                                name = "skechers Z",
+                                price = "$ 559.99"
+                            ),
+                            items(
+                                name = "skechers Z",
+                                price = "$ 559.99"
+                            ),
+                        )
+                        LazyVerticalGrid(cells = GridCells.Fixed(2), modifier = Modifier
+                            .scrollable(
+                                orientation = Orientation.Vertical,
+                                state = rememberScrollState()
+                            )
+                            .padding(bottom =10.dp),
+                            contentPadding = PaddingValues(
+                                start = 5.dp,
+                                end = 5.dp,
+                                top = 6.dp,
+                                bottom = 2.dp
+                            ), content = {
+
+                                itemsIndexed(listofcards) { _, cont ->
+                                    productcards(
+                                        onclick = this@MainActivity,
+                                        name = cont.name,
+                                        price = cont.price
+                                    )
+                                }
+                            })
+
                     }
                 }
             }
@@ -109,7 +174,8 @@ class MainActivity : ComponentActivity(), clicker {
     }
 
     override fun nowclick() {
-        Toast.makeText(this, "Functon CLicked", Toast.LENGTH_LONG).show()
+        startActivity(Intent(this,Detailscreen::class.java))
+        finish()
     }
 }
 
