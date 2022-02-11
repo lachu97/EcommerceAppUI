@@ -1,6 +1,5 @@
 package com.example.ecomdesign.homeui
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ecomdesign.R
@@ -153,7 +153,7 @@ fun Chippart(name: String, id: Int) {
             Spacer(modifier = Modifier.padding(1.dp))
             Text(
                 text = name, fontSize = 14.sp, fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
+                fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(end = 4.dp)
             )
         }
     }
@@ -179,36 +179,46 @@ fun Chipgrp() {
 
 //display cards
 @Composable
-fun productcards(onclick: () -> Unit) {
+fun productcards(onclick: clicker, name: String, price:String) {
     val newiconsize = 84
     Surface(
         modifier = Modifier
-            .width(194.dp)
-            .height(240.dp)
-            .padding(paddingval),
-        elevation = 10.dp,
+            .width(200.dp)
+            .padding(1.dp),
+        elevation = 12.dp,
         shape = RoundedCornerShape(cornerradius.dp)
     ) {
         Card(
             Modifier
-                .fillMaxSize()
                 .padding(1.dp)
                 .clickable {
-                    onclick
+                    onclick.nowclick()
                 },
-            backgroundColor = colorResource(id = R.color.mywhite),
+            backgroundColor = colorResource(id = R.color.white),
             shape = RoundedCornerShape(cornerradius.dp)
         ) {
             Column(
                 Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(1.dp),
                 verticalArrangement = Arrangement.spacedBy(1.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 cardtop()
-                Spacer(modifier = Modifier.padding(5.dp))
+                Spacer(modifier = Modifier.padding(1.dp))
                 cardmiddle()
+//                Image(
+//                    painter = painterResource(id = R.drawable.shoe12),
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(10.dp))
+//                        .size(74.dp)
+//                        .align(Alignment.CenterHorizontally)
+//                )
+                Spacer(modifier = Modifier.padding(1.dp))
+                cardtitle(name = name)
+                price(price = price)
+                bottompart()
 
             }
         }
@@ -254,24 +264,104 @@ fun cardtop(
 
 @Composable
 fun cardmiddle() {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .drawBehind {
             drawCircle(
                 color = Color.Cyan,
-                center = Offset(x = canvasWidth / 2, y = canvasHeight / 2),
-                radius = size.minDimension / 4
+                center = Offset(x = size.width / 2, y = size.height / 2),
+                radius = size.minDimension / 2
             )
-        }
+        }) {
+//        Canvas(modifier = Modifier.fillMaxWidth()) {
+//            val canvasWidth = size.width
+//            val canvasHeight = size.height
+//            drawCircle(
+//                color = Color.Cyan,
+//                center = Offset(x = canvasWidth / 2, y = canvasHeight / 2),
+//                radius = size.minDimension / 4
+//            )
+//        }
         Image(
-            painter = painterResource(id = R.drawable.shoe12)
-            , contentDescription = null,
+            painter = painterResource(id = R.drawable.shoe12),
+            contentDescription = null,
             modifier = Modifier
-                .clip(CircleShape)
+                .clip(RoundedCornerShape(10.dp))
                 .size(74.dp)
+                .align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun cardtitle(name: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = name,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Normal,
+            fontSize = 23.sp,
+            modifier = Modifier.padding(paddingval),
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.caption
         )
     }
 
+}
 
+@Composable
+fun price(price: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = price,
+            fontWeight = FontWeight.ExtraBold,
+            fontStyle = FontStyle.Normal,
+            fontSize = 25.sp,
+            modifier = Modifier.padding(2.dp),
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.h3
+        )
+    }
+}
+
+@Composable
+fun bottompart() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(paddingval),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        star(no = 5)
+        Text(text = "5", fontWeight = FontWeight.Light, fontSize = 17.sp,
+            fontStyle = FontStyle.Normal
+            )
+    }
+}
+
+@Composable
+fun star(no: Int) {
+    Row(
+        modifier = Modifier
+            .padding(2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        repeat(no) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_star),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+                    .padding(1.dp),
+                tint = Color.Blue
+            )
+        }
+    }
 }
