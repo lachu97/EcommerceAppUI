@@ -27,6 +27,13 @@
             android:theme="@style/Theme.Ecomdesign">
 
         </activity>
+        <activity
+            android:name=".Cartactivity"
+            android:exported="true"
+            android:label="Someactivity"
+            android:theme="@style/Theme.Ecomdesign">
+
+        </activity>
     </application>
 
 </manifest>
