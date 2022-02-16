@@ -127,9 +127,6 @@ fun cartcard(
                     modifier = Modifier.padding(5.dp)
                 )
                 Spacer(modifier = Modifier.padding(1.dp))
-                TextField(value = 1, onValueChange = {
-                    result.value
-                })
                 Button(onClick = { result.value.plus(1)}) {
                     Icon(
                         Icons.Filled.Add, contentDescription = null,
